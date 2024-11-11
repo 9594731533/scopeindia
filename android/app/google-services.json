@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "471363912660",
+    "firebase_url": "https://scope-f9232-default-rtdb.firebaseio.com",
+    "project_id": "scope-f9232",
+    "storage_bucket": "scope-f9232.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471363912660:android:2205acbf9b4b5504be8c41",
+        "android_client_info": {
+          "package_name": "com.example.scopeindia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6FxgSb17Jl0KVgrEHVNoF9FFgPcY0_Dk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
