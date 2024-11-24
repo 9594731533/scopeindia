@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
+import '../login/loginPage.dart';
 import 'aboutUs.dart';
 import 'contactUs.dart';
 import 'courses.dart';
+import 'dashboard/dashboard.dart';
 import 'homePage.dart';
 
 
@@ -131,6 +134,23 @@ class _RegisterNowState extends State<RegisterNow> {
   bool checkboxValue3 = false;
   bool checkboxValue4 = false;
 
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launch(launchUri.toString());
+  }
+
+  Future<void> _sendEmail(String email) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+      query: 'subject=Your Subject&body=Your Email Body',
+    );
+    await launch(emailUri.toString());
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,69 +192,120 @@ class _RegisterNowState extends State<RegisterNow> {
                 ),
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.home_filled),
-              title: const Text('Home'),
-              onTap: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context)=>const Homepage()
-                    )
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.library_books_outlined),
-              title: const Text('Courses'),
-              onTap: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context)=>const Courses()
-                    )
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.people_alt_outlined),
-              title: const Text('Know SCOPE INDIA'),
-              onTap: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context)=>const Aboutus()
-                    )
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.contact_support_outlined),
-              title: const Text('Contact US'),
-              onTap: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context)=>const ContactUs()
-                    )
-                );
-              },
-            ),
-            ElevatedButton(
-
-              onPressed: () {
-                print('Button 1 Pressed');
-              },
-              style:  ElevatedButton.styleFrom(
-                backgroundColor:  Colors.blue,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+            Container(
+              height: 650,
+              decoration: BoxDecoration(
+                  color: Colors.blueAccent
               ),
-              child: const Text('Register Now'),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.supervised_user_circle_outlined),
+                    title: const Text('Dashboard'),
+                    onTap: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>Dashboard()
+                          )
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.home_filled),
+                    title: const Text('Home'),
+                    onTap: () async {
+                      await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const Homepage()
+                          )
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.library_books_outlined),
+                    title: const Text('Courses'),
+                    onTap: () async {
+                      await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const Courses()
+                          )
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.people_alt_outlined),
+                    title: const Text('Know SCOPE INDIA'),
+                    onTap: () async {
+                      await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const Aboutus()
+                          )
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.contact_support_outlined),
+                    title: const Text('Contact US'),
+                    onTap: () async {
+                      await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const ContactUs()
+                          )
+                      );
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  ElevatedButton(
+
+                    onPressed: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const RegisterNow()
+                          )
+                      );
+                    },
+                    style:  ElevatedButton.styleFrom(
+                      backgroundColor:  Colors.deepPurple,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text('Register Now'),
+                  ),
+                  SizedBox(height: 10,),
+                  ElevatedButton(
+
+                    onPressed: () async {
+                      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text('Logged Out Successfully')), );
+                      await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const Loginpage()
+                          )
+                      );
+                    },
+                    style:  ElevatedButton.styleFrom(
+                      backgroundColor:  Colors.white,
+                      foregroundColor: Colors.deepPurple,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text('     Log out     '),
+                  ),
+                ],
+              ),
             ),
+
           ],
         ),
       ),
@@ -1351,6 +1422,7 @@ class _RegisterNowState extends State<RegisterNow> {
 
                     SizedBox(height: 30,),
                     Container(
+                      padding: EdgeInsets.all(1.0),
                       child: Column(
                           children: [
                             Text("An ISO 9001:2015 Certified Company",
@@ -1363,7 +1435,7 @@ class _RegisterNowState extends State<RegisterNow> {
                                 )),
                             SizedBox(height: 0.1,),
 
-                            Row(
+                            Column(
                               children: [
                                 Text("All Rights Reserved ",
                                     textAlign: TextAlign.center,
@@ -1376,7 +1448,7 @@ class _RegisterNowState extends State<RegisterNow> {
                                 Column(
                                   children: [
 
-                                    Text(" Suffix E Solutions ©  ",
+                                    Text(" Suffix E Solutions ©  2007-2024",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             height: 1.1,
@@ -1386,14 +1458,6 @@ class _RegisterNowState extends State<RegisterNow> {
                                         )),
                                   ],
                                 ),
-                                Text("2007-2024",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        height: 1.1,
-                                        wordSpacing: 0.1,
-                                        fontSize: 16,
-                                        color: Colors.lightBlue[200]
-                                    )),
                               ],
                             ),
                             SizedBox(height: 0.1,),
@@ -1407,7 +1471,7 @@ class _RegisterNowState extends State<RegisterNow> {
                     Column(
                       children: [
                         TextButton(
-                          onPressed: (){},
+                          onPressed: () => _makePhoneCall("+919745936073"),
                           child: Text("+91 9745936073 (TKP)",
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -1420,7 +1484,7 @@ class _RegisterNowState extends State<RegisterNow> {
 
                         ),
                         TextButton(
-                          onPressed: (){},
+                          onPressed: () => _makePhoneCall("+91 9745936073"),
                           child: Text("+91 9745936073 (TVM)",
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -1433,7 +1497,7 @@ class _RegisterNowState extends State<RegisterNow> {
 
                         ),
                         TextButton(
-                          onPressed: (){},
+                          onPressed: () => _makePhoneCall("+917592939481"),
                           child: Text("+91 7592939481 (EKM)",
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -1447,7 +1511,7 @@ class _RegisterNowState extends State<RegisterNow> {
                         ),
 
                         TextButton(
-                          onPressed: (){},
+                          onPressed: () => _makePhoneCall("+918075536185"),
                           child: Text("+91 8075536185 (NGL)",
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -1461,7 +1525,7 @@ class _RegisterNowState extends State<RegisterNow> {
                         ),
 
                         TextButton(
-                          onPressed: (){},
+                          onPressed: () => _sendEmail("info@scopeindia.org"),
                           child: Text("info@scopeindia.org",
                               textAlign: TextAlign.center,
                               style: TextStyle(

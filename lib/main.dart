@@ -1,13 +1,26 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:scopeindia/homePage.dart';
+
+
+import 'login/loginPage.dart';
+
 
 // void main() {
 //   runApp(const MyApp());
 // }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  EmailOTP.config(
+    appName: 'Scope India',
+    otpType: OTPType.numeric,
+    expiry : 300000,
+    emailTheme: EmailTheme.v3,
+    appEmail: 'bharatproject9@gmail.com',
+    otpLength: 4,
+  );
 
   try{
     await Firebase.initializeApp(
@@ -21,7 +34,12 @@ void main() async {
     runApp((MaterialApp(darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
-        home:const Homepage())));
+        // home:Homepage(),
+        home: const Loginpage(),
+        // home:Signup(),
+        // home:RegisterPage()
+    ))
+  );
   }
   catch(error){
     if (kDebugMode) {

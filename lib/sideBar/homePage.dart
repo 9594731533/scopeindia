@@ -1,7 +1,7 @@
 import'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:scopeindia/aboutUs.dart';
-import 'package:scopeindia/contactUs.dart';
+import 'package:scopeindia/sideBar/aboutUs.dart';
+import 'package:scopeindia/sideBar/contactUs.dart';
 import 'package:scopeindia/courses/aws.dart';
 import 'package:scopeindia/courses/azure.dart';
 import 'package:scopeindia/courses/devops.dart';
@@ -13,7 +13,10 @@ import 'package:scopeindia/courses/mern.dart';
 import 'package:scopeindia/courses/php.dart';
 import 'package:scopeindia/courses/python.dart';
 import 'package:scopeindia/courses/softwaretesting.dart';
-import 'package:scopeindia/registerNow.dart';
+import 'package:scopeindia/sideBar/dashboard/dashboard.dart';
+import 'package:scopeindia/login/loginPage.dart';
+import 'package:scopeindia/sideBar/registerNow.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'courses.dart';
@@ -28,6 +31,25 @@ bool validateEmail(String email) {
   RegExp regex = RegExp(pattern);
   return regex.hasMatch(email);
 }
+
+Future<void> _makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+  await launch(launchUri.toString());
+}
+
+Future<void> _sendEmail(String email) async {
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: email,
+    query: 'subject=Your Subject&body=Your Email Body',
+  );
+  await launch(emailUri.toString());
+}
+
+
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -101,7 +123,7 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
         ),
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.light,
           // Status bar color
           statusBarColor: Colors.transparent,
@@ -138,10 +160,22 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 children: [
                   ListTile(
+                    leading: const Icon(Icons.supervised_user_circle_outlined),
+                    title: const Text('Dashboard'),
+                    onTap: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>Dashboard()
+                          )
+                      );
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.home_filled),
                     title: const Text('Home'),
                     onTap: () async {
-                      await Navigator.push(
+                      await Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context)=>const Homepage()
@@ -153,7 +187,7 @@ class _HomepageState extends State<Homepage> {
                     leading: const Icon(Icons.library_books_outlined),
                     title: const Text('Courses'),
                     onTap: () async {
-                      await Navigator.push(
+                      await Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context)=>const Courses()
@@ -165,7 +199,7 @@ class _HomepageState extends State<Homepage> {
                     leading: const Icon(Icons.people_alt_outlined),
                     title: const Text('Know SCOPE INDIA'),
                     onTap: () async {
-                      await Navigator.push(
+                      await Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context)=>const Aboutus()
@@ -177,7 +211,7 @@ class _HomepageState extends State<Homepage> {
                     leading: const Icon(Icons.contact_support_outlined),
                     title: const Text('Contact US'),
                     onTap: () async {
-                      await Navigator.push(
+                      await Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context)=>const ContactUs()
@@ -205,6 +239,28 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                     child: const Text('Register Now'),
+                  ),
+                  SizedBox(height: 10,),
+                  ElevatedButton(
+
+                    onPressed: () async {
+                      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text('Logged Out Successfully')), );
+                      await Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>const Loginpage()
+                          )
+                      );
+                    },
+                    style:  ElevatedButton.styleFrom(
+                      backgroundColor:  Colors.white,
+                      foregroundColor: Colors.deepPurple,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text('     Log out     '),
                   ),
                 ],
               ),
@@ -543,21 +599,21 @@ class _HomepageState extends State<Homepage> {
 
 
                     ),
-
-                    SizedBox(height: 40,),//Youtube video
+                    //Youtube video
 
                     Container(
+                      padding: EdgeInsets.all(1.2),
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Text('SCOPE INDIA \n is open 365 days a year',
+                            Text('SCOPE INDIA is open 365 days a year',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 32,
                                 color: Colors.blue[900]
                               ),),
                             SizedBox(height: 20,),
-                            Text('We are open 7 days 24 hrs to talk to \n you and listen to your queries.',
+                            Text('We are open 7 days 24 hrs to talk to  you and listen to your queries.',
                               style: TextStyle(
                                   fontSize: 24,
                                   color: Colors.black
@@ -1141,6 +1197,7 @@ class _HomepageState extends State<Homepage> {
 
                       SizedBox(height: 30,),
                       Container(
+                        padding: EdgeInsets.all(1.0),
                         child: Column(
                           children: [
                             Text("An ISO 9001:2015 Certified Company",
@@ -1153,7 +1210,7 @@ class _HomepageState extends State<Homepage> {
                             )),
                             SizedBox(height: 0.1,),
 
-                            Row(
+                            Column(
                               children: [
                                 Text("All Rights Reserved ",
                                     textAlign: TextAlign.center,
@@ -1166,7 +1223,7 @@ class _HomepageState extends State<Homepage> {
                                 Column(
                                   children: [
 
-                                    Text(" Suffix E Solutions ©  ",
+                                    Text(" Suffix E Solutions ©  2007-2024",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             height: 1.1,
@@ -1176,14 +1233,6 @@ class _HomepageState extends State<Homepage> {
                                         )),
                                   ],
                                 ),
-                                Text("2007-2024",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        height: 1.1,
-                                        wordSpacing: 0.1,
-                                        fontSize: 16,
-                                        color: Colors.lightBlue[200]
-                                    )),
                               ],
                             ),
                             SizedBox(height: 0.1,),
@@ -1197,7 +1246,7 @@ class _HomepageState extends State<Homepage> {
                       Column(
                         children: [
                           TextButton(
-                            onPressed: (){},
+                            onPressed: () => _makePhoneCall("+919745936073"),
                             child: Text("+91 9745936073 (TKP)",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -1210,7 +1259,7 @@ class _HomepageState extends State<Homepage> {
 
                           ),
                           TextButton(
-                            onPressed: (){},
+                            onPressed: () => _makePhoneCall("+91 9745936073"),
                             child: Text("+91 9745936073 (TVM)",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -1223,7 +1272,7 @@ class _HomepageState extends State<Homepage> {
 
                           ),
                           TextButton(
-                            onPressed: (){},
+                            onPressed: () => _makePhoneCall("+917592939481"),
                             child: Text("+91 7592939481 (EKM)",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -1237,7 +1286,7 @@ class _HomepageState extends State<Homepage> {
                           ),
 
                           TextButton(
-                            onPressed: (){},
+                              onPressed: () => _makePhoneCall("+918075536185"),
                             child: Text("+91 8075536185 (NGL)",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -1251,7 +1300,7 @@ class _HomepageState extends State<Homepage> {
                           ),
 
                           TextButton(
-                            onPressed: (){},
+                            onPressed: () => _sendEmail("info@scopeindia.org"),
                             child: Text("info@scopeindia.org",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(

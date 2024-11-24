@@ -1,10 +1,10 @@
 import'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../aboutUs.dart';
-import '../contactUs.dart';
-import '../courses.dart';
-import '../homePage.dart';
+import '../sideBar/aboutUs.dart';
+import '../sideBar/contactUs.dart';
+import '../sideBar/courses.dart';
+import '../sideBar/homePage.dart';
 
 
 
